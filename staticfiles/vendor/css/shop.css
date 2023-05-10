@@ -1,0 +1,8 @@
+body {
+    padding-top: 56px;
+    .carousel-item img {
+    height: 500px;
+    width: 500px;
+    object-fit: cover;
+}
+}

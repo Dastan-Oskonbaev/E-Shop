@@ -1,28 +1,8 @@
 from django import forms
 from django.contrib import admin
+from mptt.admin import DraggableMPTTAdmin
 
-from django.utils.safestring import mark_safe
-from modeltranslation.translator import TranslationOptions
-
-from .models import Category,  RatingStar, Rating, Product,  Reviews
-
-
-from modeltranslation.admin import TranslationAdmin
-
-
-class ProductAdminForm(forms.ModelForm):
-    description_ru = forms.CharField(label=' Описание')
-    description_en = forms.CharField(label=' Описание')
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'url')
-    list_display_links = ('name',)
+from .models import Category, RatingStar, Rating, Product, Reviews,  Cart, CartItem, ProductImage, Specification
 
 
 class ReviewInLine(admin.TabularInline):
@@ -31,56 +11,61 @@ class ReviewInLine(admin.TabularInline):
     readonly_fields = ('name', 'email')
 
 
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     list_display = ("title", "category", "url", )
-#     list_filter = ("category", )
-#     search_fields = ("title", "category__name")
-#     inlines = [ReviewInLine]
-#     save_on_top = True
-#     save_as = True
-#     form = ProductAdminForm
-#     readonly_fields = ("get_image",)
-#     fieldsets = (
-#         (None, {
-#             "fields": ('title', "description", ("poster", "get_image"))
-#         }),
-#         (None, {
-#             "fields": (("country"), 'category')
-#         }),
-#         ("Options", {
-#             "fields": (("url", ),)
-#         }),
-#     )
-#
-#     def get_image(self, obj):
-#         return mark_safe(f'<img src={obj.poster.url} width="100" height="110"')
-#
-#     def unpublish(self, request, queryset):
-#         """Снять с публикации"""
-#         row_update = queryset.update()
-#         if row_update == 1:
-#             message_bit = "1 запись была обновлена"
-#         else:
-#             message_bit = f"{row_update} записей были обновлены"
-#         self.message_user(request, f"{message_bit}")
-#
-#     def publish(self, request, queryset):
-#         """Опубликовать"""
-#         row_update = queryset.update(draft=False)
-#         if row_update == 1:
-#             message_bit = "1 запись была обновлена"
-#         else:
-#             message_bit = f"{row_update} записей были обновлены"
-#         self.message_user(request, f"{message_bit}")
-#
-#     publish.short_description = "Опубликовать"
-#     # publish.allowed_permissions = ('change', )
-#
-#     unpublish.short_description = "Снять с публикации"
-#     unpublish.allowed_permissions = ('change',)
-#
-#     get_image.short_description = "Постер"
+class ProductImageInLine(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+
+
+class SpecificationInLine(admin.TabularInline):
+    model = Specification
+    extra = 1
+
+
+@admin.register(Category)
+class CategoryAdmin(DraggableMPTTAdmin):
+    list_display = (
+        'tree_actions',
+        'indented_title',
+    )
+    list_display_links = (
+        'indented_title',
+    )
+    list_filter = ['parent']
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "category", "price", "quantity", "description")
+    list_filter = ("name", "category", "price", "quantity", "description")
+    search_fields = ("name", "category", "price", "quantity", "description")
+    inlines = [ReviewInLine, SpecificationInLine, ProductImageInLine]
+    save_on_top = True
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('image', 'product')
+    list_filter = ('product',)
+    search_fields = ('product__name',)
+
+
+@admin.register(Specification)
+class SpecificationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'product')
+    list_filter = ('product',)
+    search_fields = ('product__name',)
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    list_filter = ('user',)
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'cart', 'quantity')
+    list_filter = ('product', 'cart', 'quantity')
 
 
 @admin.register(Reviews)
@@ -92,12 +77,6 @@ class ReviewsAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('star', 'product', 'ip')
-
-
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    pass
-    # list_display = ('star', 'product', 'ip')
 
 
 admin.site.register(RatingStar)

@@ -1,0 +1,44 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block css %}
+ <!-- Custom styles for this template -->
+    <link href="{% static 'vendor/css/index.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+    <section>
+    <!--    <div class="alert alert-light text-center" role="alert">-->
+    <!--        Информационное сообщение-->
+    <!--    </div>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 class="mt-5">E Shop</h1>
+                <p>
+                    Новая техника и лучшие бренды на E Shop.
+                    Бесплатная доставка по всему миру! Скидки:  -20% новым покупателям.
+                </p>
+                <button id="start-purchase-btn" type="button" class="btn btn-lg">
+                    <a id="start-purchase-link" href="{% url 'shop' %}">
+                        Начать покупки
+                    </a>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

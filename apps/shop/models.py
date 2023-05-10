@@ -1,31 +1,58 @@
 from django.db import models
 from django.urls import reverse
+from mptt.models import MPTTModel, TreeForeignKey
+from apps.accounts.models import User
+from django.utils.translation import gettext_lazy as _
 
 
-class Category(models.Model):
-    name = models.CharField('Категория', max_length= 150)
-    description = models.TextField('Описание', default='')
-    url = models.SlugField(max_length=160, unique=True, default='')
+class Category(MPTTModel):
+    name = models.CharField(
+        _('Название'),
+        max_length=255,
+    )
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='children'
+    )
+    description = models.TextField(
+        _('Описание'),
+        max_length=500
+    )
 
     def __str__(self):
         return self.name
 
-    class Meta:
+    class MPTTMeta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
+        order_insertion_by = ['name']
 
 
 class Product(models.Model):
-    title = models.CharField('Название', max_length=100, default='')
-    description = models.TextField("Описание", default='')
-    poster = models.ImageField('Постер', upload_to='shop/', default='')
-    # year = models.SmallIntegerField('Дата выхода', default='')
-    country = models.CharField('Страна', max_length=30, default='')
-    category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.SET_NULL, null=True)
-    url = models.SlugField(max_length=160, unique=True, default='')
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        verbose_name=_('Категория'),
+
+    )
+    name = models.CharField(
+        _('Название'),
+        max_length=255
+    )
+    price = models.IntegerField(
+        _('Цена')
+    )
+    quantity = models.IntegerField(
+        _('Количество')
+    )
+    description = models.TextField(
+        _('Описание')
+    )
 
     def __str__(self):
-        return self.title
+        return self.name
 
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"slug": self.url})
@@ -36,6 +63,71 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+
+
+class Specification(models.Model):
+    name = models.CharField(
+        _('Название'),
+        max_length=100
+    )
+    value = models.CharField(
+        _('Значение'),
+        max_length=250
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_('Продукт'),
+        related_name='specifications'
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Спецификация"
+        verbose_name_plural = "Спецификации"
+
+
+class ProductImage(models.Model):
+    image = models.URLField(
+        _('Изображение')
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='images'
+    )
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name = 'Изображение'
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f' Корзина {self.user}'
+
+    class Meta:
+        verbose_name = "Корзина"
+        verbose_name_plural = "Корзины"
+
+
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.product}* {self.quantity}'
+
+    class Meta:
+        verbose_name = "Корзина"
+        verbose_name_plural = "Корзины"
 
 
 class RatingStar(models.Model):
@@ -76,3 +168,5 @@ class Reviews(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+
+
