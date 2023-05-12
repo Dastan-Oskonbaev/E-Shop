@@ -23,7 +23,7 @@
             <h1 class="my-4">E Shop</h1>
             <div class="list-group">
                 {% for category in categories %}
-                    <a href="#" class="list-group-item">{{ category.name}}</a>
+                    <a href="{% url 'category' category.id %}" class="list-group-item"> {{ category.name }} </a>
                 {% endfor %}
             </div>
 
@@ -63,20 +63,16 @@
                 {% for  product in products %}
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <a href="#">
-                            <img class="card-img-top"
-                                 src="{{ product.productimage.url }} "
-                                 alt="">
+                       <img src="{{ product.image.url }}" class="img-fluid" alt="">
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="#">{{ product.name }}</a>
+                                <a href="#"">{{ product.name }}</a>
                             </h4>
                             <h5>{{ product.price }} .сом </h5>
                             <p class="card-text">{{ product.description }} </p>
                         </div>
-                        <div class="card-footer text-center">
-                            <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
+                         <a class="btn btn-outline-success" href="{% url 'cart_add' product.id %}"> Отправить в корзину </a>
                         </div>
                     </div>
                 </div>

@@ -19,12 +19,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from apps.shop.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("apps.shop.urls")),
-    path("", include("apps.accounts.urls")),
+    path("accounts/", include("apps.accounts.urls")),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

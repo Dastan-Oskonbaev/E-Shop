@@ -1,0 +1,69 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block css %}
+ <!-- Custom styles for this template -->
+    <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+    <div class="container">
+
+    <div class="row">
+
+        <div class="col-lg-3">
+
+            <h1 class="my-4">E Shop</h1>
+            <div class="list-group">
+                {% for category in categories %}
+                    <a href="{% url 'category' category.id %}" class="list-group-item"> {{ category.name }} </a>
+                {% endfor %}
+            </div>
+
+        </div>
+        <!-- /.col-lg-3 -->
+
+        <div class="col-lg-9">
+
+
+            <div class="row">
+                {% for  product in products %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                       <img src="{{ product.image.url }}" class="img-fluid" alt="">
+                        </a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a href="#">{{ product.name }}</a>
+                            </h4>
+                            <h5>{{ product.price }} .сом </h5>
+                            <p class="card-text">{{ product.description }} </p>
+                        </div>
+                         <a class="btn btn-outline-success" href="{% url 'cart_add' product.id %}"> Отправить в корзину </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block footer %}
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Dastan Oskonbaev 2023</p>
+    </div>
+    <!-- /.container -->
+</footer>
+{% endblock %}
+
+

@@ -41,14 +41,21 @@ class Product(models.Model):
         _('Название'),
         max_length=255
     )
-    price = models.IntegerField(
+    price = models.PositiveIntegerField(
         _('Цена')
     )
-    quantity = models.IntegerField(
+    quantity = models.PositiveIntegerField(
         _('Количество')
     )
     description = models.TextField(
-        _('Описание')
+        _('Описание'),
+        max_length=500
+    )
+    image = models.ImageField(
+        _('Изображение'),
+        upload_to='product_images/',
+        null=True,
+        blank=True
     )
 
     def __str__(self):
@@ -89,41 +96,23 @@ class Specification(models.Model):
         verbose_name_plural = "Спецификации"
 
 
-class ProductImage(models.Model):
-    image = models.URLField(
-        _('Изображение')
-    )
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name='images'
-    )
-
-    def __str__(self):
-        return self.product.name
-
-    class Meta:
-        verbose_name = 'Изображение'
-
-
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f' Корзина {self.user}'
 
-    class Meta:
-        verbose_name = "Корзина"
-        verbose_name_plural = "Корзины"
+    def sum(self):
+        return self.product.price * self.quantity
 
-
-class CartItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return f'{self.product}* {self.quantity}'
+    def total_sum(self):
+        carts = Cart.objects.filter(user=self.user)
+        return sum(cart.sum() for cart in carts)
+    def total_quantity(self):
+        carts = Cart.objects.filter(user=self.user)
+        return sum(cart.quantity() for cart in carts)
 
     class Meta:
         verbose_name = "Корзина"
