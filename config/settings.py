@@ -140,11 +140,13 @@ LOGOUT_REDIRECT_URL = "/"
 
 AUTH_USER_MODEL = 'accounts.User'
 
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 SITE_ID = 1
+
 MPTT_ADMIN_LEVEL_INDENT = 20
+
+DOMAIN_NAME = config('DOMAIN_NAME', 'Something')

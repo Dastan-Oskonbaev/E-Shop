@@ -1,28 +1,47 @@
 from django.db.models import Q
 from django.http import request, JsonResponse, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
-from .forms import ReviewForm, RatingForm
-from .models import Category, Rating, Product, Cart
+from .models import Category, Product, Cart
 
 
-def index(request):
-    context = {'title': 'E Shop'}
-    return render(request, 'shop/index.html', context)
+class IndexView(View):
+    def get(self, request):
+        context = {'title': 'E Shop'}
+        return render(request, 'shop/index.html', context)
+# def index(request):
+#     context = {'title': 'E Shop'}
+#     return render(request, 'shop/index.html', context)
 
 
-def shop(request, category_id=None):
-    context = {
-        'title': 'E Shop - Каталог',
-        'categories': Category.objects.all(),
-        'products': Product.objects.filter(category_id=category_id) if category_id else Product.objects.all(),
-    }
-    return render(request, 'shop/shop.html', context)
+class ShopView(View):
+    def get(self, request, category_id=None):
+        categories = Category.objects.all()
+        products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+        context = {
+            'title': 'E Shop - Каталог',
+            'categories': categories,
+            'products': products,
+        }
+        return render(request, 'shop/shop.html', context)
+# def shop(request, category_id=None):
+#     context = {
+#         'title': 'E Shop - Каталог',
+#         'categories': Category.objects.all(),
+#         'products': Product.objects.filter(category_id=category_id) if category_id else Product.objects.all(),
+#     }
+#     return render(request, 'shop/shop.html', context)
 
-
-
+class ProductDetailView(View):
+    def get(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id)
+        context = {
+            'title': f'{product.name} - E Shop',
+            'product': product,
+        }
+        return render(request, 'shop/product_detail.html', context)
 def cart_add(request, product_id):
     product = Product.objects.get(id=product_id)
     carts = Cart.objects.filter(user=request.user, product=product)
