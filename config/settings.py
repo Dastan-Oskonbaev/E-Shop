@@ -29,7 +29,8 @@ ALLOWED_HOSTS = []
 MY_APPS = [
     'apps.shop',
     'apps.accounts',
-    'apps.orders'
+    'apps.orders',
+    'apps.cart'
 ]
 
 THIRD_PART_APPS = [

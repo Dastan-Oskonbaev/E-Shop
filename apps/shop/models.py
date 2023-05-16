@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-from apps.accounts.models import User
 from django.utils.translation import gettext_lazy as _
 
 
@@ -96,28 +95,37 @@ class Specification(models.Model):
         verbose_name_plural = "Спецификации"
 
 
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return f' Корзина {self.user}'
-
-    def sum(self):
-        return self.product.price * self.quantity
-
-    def total_sum(self):
-        carts = Cart.objects.filter(user=self.user)
-        return sum(cart.sum() for cart in carts)
-    def total_quantity(self):
-        carts = Cart.objects.filter(user=self.user)
-        return sum(cart.quantity() for cart in carts)
-
-    class Meta:
-        verbose_name = "Корзина"
-        verbose_name_plural = "Корзины"
-
+# class Cart(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return f'Корзина {self.user}'
+#
+#
+# class CartItem(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(default=0)
+#
+#     def __str__(self):
+#         return f' Товары в корзине {self.user}'
+#
+#     def sum(self):
+#         return self.product.price * self.quantity
+#
+#     def total_sum(self):
+#         carts = CartItem.objects.filter(user=self.user)
+#         return sum(cart.sum() for cart in carts)
+#
+#     def total_quantity(self):
+#         carts = CartItem.objects.filter(user=self.user)
+#         return sum(cart.quantity() for cart in carts)
+#
+#     class Meta:
+#         verbose_name = "Товар в корзине"
+#         verbose_name_plural = "Товары в корзине"
+#
 
 class RatingStar(models.Model):
     value = models.SmallIntegerField('Значение', default='1')

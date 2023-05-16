@@ -72,7 +72,11 @@
                             <h5>{{ product.price }} .сом </h5>
                             <p class="card-text">{{ product.description }} </p>
                         </div>
-                         <a class="btn btn-outline-success" href="{% url 'cart_add' product.id %}"> Отправить в корзину </a>
+                        <form method="POST" action="{% url 'cart-add' product.id %}">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" class="form-control mb-3" min="1">
+                <button type="submit" class="btn btn-primary">{{ _('Добавить в корзину') }}</button>
+            </form>
                         </div>
                     </div>
                 </div>

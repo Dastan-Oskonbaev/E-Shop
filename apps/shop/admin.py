@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Category, RatingStar, Rating, Product, Reviews,  Cart, Specification
+from .models import Category, RatingStar, Rating, Product, Reviews, Specification
 
 
 class ReviewInLine(admin.TabularInline):
@@ -54,7 +54,7 @@ class ReviewsAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('star', 'product', 'ip')
 
-admin.site.register(Cart)
+
 admin.site.register(RatingStar)
 
 admin.site.site_title = 'E Shop'
