@@ -32,3 +32,17 @@ class CartAddView(LoginRequiredMixin, View):
 #         cart_item = CartItem.objects.get(id=cart_item_id)
 #         cart_item.delete()
 #         return redirect('cart')
+
+class RemoveFromCartView(LoginRequiredMixin, View):
+    login_url = '/login/'
+
+    def post(self, request, product_id):
+        cart = Cart.objects.get(owner=request.user)
+
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        cart.cart_items.filter(product=product).delete()
+        return render(request, 'cart/cart.html', {'cart': cart})
