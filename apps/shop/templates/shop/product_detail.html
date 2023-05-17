@@ -25,11 +25,14 @@
                             <h4 class="card-title">{{ product.name }}</h4>
                             <h5>{{ product.price }} .сом</h5>
                             <p class="card-text" style="font-size: 18px">{{ product.description }}</p>
-<form method="POST" action="{% url 'cart-add' product.id %}">
+                        </div>
+                        </div>
+                    <form method="POST" action="{% url 'cart-add' product.id %}">
                 {% csrf_token %}
                 <input type="number" name="quantity" value="1" class="form-control mb-3" min="1">
                 <button type="submit" class="btn btn-primary">{{ _('Добавить в корзину') }}</button>
-            </form>                        </div>
+            </form>
+        </div>
                     </div>
                 </div>
 
