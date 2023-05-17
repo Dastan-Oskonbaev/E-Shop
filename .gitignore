@@ -1,6 +1,5 @@
 .idea
 *__pychache__
 venv
-media
 db.sqlite3
 .env
