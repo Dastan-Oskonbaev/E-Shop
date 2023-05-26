@@ -1,6 +1,8 @@
 
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
+# from django.core.mail import send_mail
+# from django.http import HttpResponse
 
 from .models import Category, Product
 
@@ -31,26 +33,16 @@ class ProductDetailView(View):
             'product': product,
         }
         return render(request, 'shop/product_detail.html', context)
-#
-#
-# def cart_item_add(request, product_id):
-#     product = Product.objects.get(id=product_id)
-#     carts = CartItem.objects.filter(user=request.user, product=product)
-#
-#     if not carts.exists():
-#         CartItem.objects.create(user=request.user, product=product, quantity=1)
-#     else:
-#
-#         cart = carts.first()
-#         cart.quantity += 1
-#         cart.save()
-#     return HttpResponseRedirect(request.META['HTTP_REFERER'])
-#
-#
-# def cart_item_remove(request, cart_id):
-#     cart = CartItem.objects.get(id=cart_id)
-#     cart.delete()
-#     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+
+# def send_email_view(request):
+#     send_mail(
+#         'test',  # Тема письма
+#         'привет. теперь ты будешь получать спам',  # Тело письма
+#         'dastiw1910@gmail.com',  # Адрес отправителя
+#         ['edilbekova_aiperi@mail.ru'],  # Список адресов получателей
+#         fail_silently=False,  # Если установлено значение True, ошибки отправки будут игнорироваться
+#     )
+#     return HttpResponse('Email sent successfully!')
 
 

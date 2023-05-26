@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -30,7 +30,7 @@ MY_APPS = [
     'apps.shop',
     'apps.accounts',
     'apps.orders',
-    'apps.cart'
+    'apps.cart',
 ]
 
 THIRD_PART_APPS = [
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'tepmplates'],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,3 +151,20 @@ SITE_ID = 1
 MPTT_ADMIN_LEVEL_INDENT = 20
 
 DOMAIN_NAME = config('DOMAIN_NAME', 'Something')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Укажите SMTP-сервер, который вы используете
+EMAIL_PORT = 587  # Укажите порт SMTP-сервера
+EMAIL_USE_TLS = True  # Используйте ли TLS для безопасного соединения
+EMAIL_HOST_USER = 'dastiw1910@gmail.com'  # Укажите ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = 'hdnwzcnweknwgoss'  # Укажите ваш пароль от почты
+
+
+# Celery Configuration Options
+# Celery settings
+CELERY_BROKER_URL = 'filesystem://'
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'data_folder_in': './celery/queues',
+    'data_folder_out': './celery/queues',
+}
