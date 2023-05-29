@@ -74,8 +74,10 @@
                         </div>
                         <form method="POST" action="{% url 'cart-add' product.id %}">
                 {% csrf_token %}
+                            {% if user.is_authenticated %}
                 <input type="number" name="quantity" value="1" class="form-control mb-3" min="1">
                 <button type="submit" class="btn btn-primary">{{ _('Добавить в корзину') }}</button>
+                            {% endif %}
             </form>
                         </div>
                     </div>
