@@ -19,10 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', '1234')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -157,14 +157,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Укажите SMTP-сервер, который вы используете
 EMAIL_PORT = 587  # Укажите порт SMTP-сервера
 EMAIL_USE_TLS = True  # Используйте ли TLS для безопасного соединения
-EMAIL_HOST_USER = 'dastiw1910@gmail.com'  # Укажите ваш адрес электронной почты
-EMAIL_HOST_PASSWORD = 'hdnwzcnweknwgoss'  # Укажите ваш пароль от почты
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Укажите ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD') # Укажите ваш пароль от почты
 
 
 # Celery Configuration Options
-# Celery settings
-CELERY_BROKER_URL = 'filesystem://'
-CELERY_BROKER_TRANSPORT_OPTIONS = {
-    'data_folder_in': './celery/queues',
-    'data_folder_out': './celery/queues',
-}
+# Celery settingspip install redis
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"

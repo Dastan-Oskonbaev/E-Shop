@@ -8,7 +8,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
     email = models.EmailField()
-    total = models.IntegerField()
+    total_price = models.IntegerField()
     comment = models.TextField(blank=True)
 
     def __str__(self):

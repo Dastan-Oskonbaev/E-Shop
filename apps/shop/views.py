@@ -1,8 +1,7 @@
-
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
-# from django.core.mail import send_mail
-# from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.http import HttpResponse
 
 from .models import Category, Product
 
@@ -35,14 +34,14 @@ class ProductDetailView(View):
         return render(request, 'shop/product_detail.html', context)
 
 
-# def send_email_view(request):
-#     send_mail(
-#         'test',  # Тема письма
-#         'привет. теперь ты будешь получать спам',  # Тело письма
-#         'dastiw1910@gmail.com',  # Адрес отправителя
-#         ['edilbekova_aiperi@mail.ru'],  # Список адресов получателей
-#         fail_silently=False,  # Если установлено значение True, ошибки отправки будут игнорироваться
-#     )
-#     return HttpResponse('Email sent successfully!')
+def send_email_view(request):
+    send_mail(
+        'test',  # Тема письма
+        'привет. теперь ты будешь получать спам',  # Тело письма
+        'dastiw1910@gmail.com',  # Адрес отправителя
+        ['edilbekova_aiperi@mail.ru', 'urmatovnaa05@gmail.com'],  # Список адресов получателей
+        fail_silently=False,  # Если установлено значение True, ошибки отправки будут игнорироваться
+    )
+    return HttpResponse('Email sent successfully!')
 
 
