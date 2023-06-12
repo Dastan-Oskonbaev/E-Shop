@@ -94,7 +94,6 @@ class Specification(models.Model):
         verbose_name = "Спецификация"
         verbose_name_plural = "Спецификации"
 
-
 # class Cart(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
 #
